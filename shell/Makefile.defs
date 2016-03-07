@@ -1,0 +1,37 @@
+CC     = g++  
+OPT    = -O0 -std=c++11
+DEBUG  = -g
+SYSDIR = -I $(SYSTEMC_HOME)/include
+INCDIR = -I. -I.. $(SYSDIR) -I$(SC_FORSYDE)
+LIBDIR = -L. -L.. -L$(SYSTEMC_HOME)/lib-$(SYSC_ARCH) 
+
+## Build with maximum gcc warning level
+CFLAGS = -Wall -Wno-deprecated -Wno-return-type -Wno-char-subscripts -pthread $(DEBUG) $(OPT) $(EXTRACFLAGS)
+#CFLAGS = -arch i386 -Wall -Wno-deprecated -Wno-return-type -Wno-char-subscripts $(DEBUG) $(OPT) $(EXTRACFLAGS)
+
+LIBS   = -lstdc++ -lm $(EXTRA_LIBS) -lsystemc
+OBJS   = $(addprefix obj/,$(notdir $(SRCS:.cpp=.o)))
+EXE    = run.x
+
+all: directories $(EXE);
+
+directories:
+	mkdir -p obj
+
+.PHONY: clean 
+
+$(EXE): $(OBJS)
+	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(LIBS) 2>&1 | c++filt
+
+## based on http://www.paulandlesley.org/gmake/autodep.html
+obj/%.o : src/%.cpp
+	$(CC) $(CFLAGS) $(INCDIR) -c -MMD -o $@ $<
+	@cp obj/$*.d obj/$*.P; \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\$$//' \
+	-e '/^$$/ d' -e 's/$$/ :/' < obj/$*.d >> obj/$*.P; \
+	rm -f obj/$*.d
+
+clean:
+	-rm -rf obj *~ $(EXE)  *.log *.out;
+
+-include $(SRCS:.cpp=.P)
