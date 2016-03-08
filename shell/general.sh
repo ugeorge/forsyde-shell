@@ -45,5 +45,6 @@ Needs to be called from a project root folder!
 }
 
 function _print-general () {
-    echo " * $(info-update-all)\n * $(info-clean-all)"
+    echo " * $(info-update-all)"
+    echo " * $(info-clean-all)"
 }

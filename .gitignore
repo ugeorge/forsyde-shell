@@ -4,5 +4,8 @@
 !LICENSE
 !.gitignore
 !shell/*
+libs/
+tools/
+projects/
 *~
 *#
