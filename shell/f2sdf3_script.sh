@@ -1,5 +1,5 @@
 function f2sdf3 () {
-    if [ ! $(dirname $(pwd)) == $DEMO_HOME/models/sysc ]; then
+    if [  ! -f .project ]; then
 	echo "The working directory is not a ForSyDe project. Abandoning command!"
 	return
     fi

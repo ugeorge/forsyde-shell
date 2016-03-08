@@ -20,7 +20,7 @@ EOF
 }
 
 function execute-model () {
-    if [ ! $(dirname $(pwd)) == $DEMO_HOME/models/sysc ]; then
+    if [ ! -f .project ]; then
 	echo "The working directory is not a ForSyDe project. Abandoning command!"
 	return
     fi
@@ -64,7 +64,7 @@ function execute-model () {
 
 
 function info-execute-model () {
-    echo "execute-model : runs a ForSyDe model [+ extracts and plot performance]"
+    echo "execute-model : runs a ForSyDe model and extracts and plot performance"
 }
 
 function help-execute-model () {

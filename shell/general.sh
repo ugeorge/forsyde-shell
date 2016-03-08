@@ -1,33 +1,47 @@
-function update-all {
-    workdir=$(pwd)
-    for repo in $(find $DEMO_HOME -type d -name ".git"); do
+function __pull {
+    for repo in $(find $1 -type d -name ".git"); do
 	cd $(dirname $repo)
 	pwd
 	git pull
     done
+}
+
+
+function pull  {
+    workdir=$(pwd)
+    case $1 in
+	-p* ) __pull $DEMO_HOME/$projdir ;;
+	-l* ) __pull $DEMO_HOME/$libdir ;;
+	-t* ) __pull $DEMO_HOME/$tooldir ;;
+	* )   __pull $DEMO_HOME ;;
+    esac
     cd $workdir
 }
 
-function info-update-all () {
-    echo "update-all : pulls the latest versions of the tools and libs"
+function info-pull () {
+    echo "pull : pulls the latest versions of the included repositories"
 }
 
-function help-update-all () {
+function help-pull () {
     info-update-all
     echo " 
 
-Usage: update-all
+Usage: pull [option]
 
-Works anywhere within the shell.
+option        what to update
+  -a --all         everything (default)
+  -p --projects    only projects
+  -l --libraries   only libraries
+  -t --tools       only tools
 "   
 }
 
 function clean-all {
-    if [ ! $(dirname $(pwd)) == $DEMO_HOME/models/sysc ]; then
+    if [ ! -f .project ]; then
 	echo "The working directory is not a ForSyDe project. Abandoning command!"
 	return
     fi
-    find . -maxdepth 1 -mindepth 1 -not \( -name 'src' -or -name 'files' -or -name 'Makefile' \)  -exec rm -rf "{}" \;
+    find . -maxdepth 1 -mindepth 1 -not \( -name 'src' -or -name 'files' -or -name 'Makefile' -or -name '.project' \)  -exec rm -rf "{}" \;
 }
 
 function info-clean-all () {

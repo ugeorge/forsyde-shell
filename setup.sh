@@ -47,21 +47,8 @@ gnome-terminal -e "bash --rcfile shell/forsyde-shell.sh"' > forsyde-shell
     chmod +x forsyde-shell
 }
 
-function install-apps () {
-    echo "Installing applications from $1 ..."
-    mkdir -p $projdir
-    appdir=$projdir/$2
-    if [ ! -d $appdir ]; then
-	git clone $1 $appdir
-    else
-	cd $appdir
-	git pull
-	cd $homedir
-    fi
-    for app in $(find $projdir -type f -name 'Makefile' -printf '%P\n'); do
-	appname=$(dirname $app)
-	add-intro " * $appname" " Applications:"
-    done
+function wrap-up () {
+    sed -i 's/: \$/: \\\$/g' $shfile
 }
 
 function install-forsyde-systemc {
@@ -99,7 +86,24 @@ function install-forsyde-systemc {
     add-script "$scriptpath/generate-makefile.sh"
     add-intro " * make clean : cleans the results of a compialtion (no help)" "$cmdstring"
     add-intro " * make : GNU make for compiling ForSyDe-SystemC projects (no help)" "$cmdstring"
-    add-intro "$(source $scriptpath/generate-makefile.sh; info-generate-makefile);" "$cmdstring";
+    add-intro " * $(source $scriptpath/generate-makefile.sh; info-generate-makefile);" "$cmdstring";
+}
+
+function install-apps () {
+    echo "Installing applications from $1 ..."
+    mkdir -p $projdir
+    appdir=$projdir/$2
+    if [ ! -d $appdir ]; then
+	git clone $1 $appdir
+    else
+	cd $appdir
+	git pull
+	cd $homedir
+    fi
+    for app in $(find $projdir -type f -name '.project' -printf '%P\n'); do
+	appname=$(dirname $app)
+	add-intro " * $appname" " Applications:"
+    done
 }
 
 function install-f2dot {
@@ -124,7 +128,7 @@ function install-f2dot {
     echo "Creating  shell environment variables for f2dot..."
     add-var "F2DOT" "$(cd $f2dotpath; pwd)/f2dot"
     add-script "$scriptpath/f2dot_script.sh"
-    add-intro ' * f2dot           bin    : \\$F2DOT' " Tools included:"
+    add-intro ' * f2dot           script : $F2DOT' " Tools included:"
     add-intro " * $(source $scriptpath/f2dot_script.sh; info-f2dot)" "$cmdstring"
 }
 
@@ -148,7 +152,7 @@ function install-f2sdf3 {
     echo "Creating  shell environment variables for f2sdf3... "
     add-var "F2SDF3_HOME" "$(cd $f2sdf3path; pwd)"
     add-script "$scriptpath/f2sdf3_script.sh"
-    add-intro ' * f2sdf3          prefix : \\$F2SDF3_HOME' " Tools included:"
+    add-intro ' * f2sdf3          prefix : $F2SDF3_HOME' " Tools included:"
     add-intro " * $(source $scriptpath/f2sdf3_script.sh; info-f2sdf3)" "$cmdstring"
 }
 
@@ -156,6 +160,8 @@ function install-f2et {
     echo "Installing valgrind..."
     if ! $(dpkg -l valgrind &> /dev/null); then sudo apt-get install -y valgrind kcachegrind graphviz; fi
     if ! $(dpkg -l xml-twig-tools &> /dev/null); then sudo apt-get install -y xml-twig-tools; fi
+    if ! $(dpkg -l gnuplot &> /dev/null); then sudo apt-get install -y gnuplot; fi
+
 
     echo "Creating  shell environment variables for valgrind functions... "
     add-script "$scriptpath/valgrind_script.sh"
@@ -177,7 +183,7 @@ esac
 read -p "Would you like to install the public demonstrator apps for ForSyDe? [y]" yn
 case $yn in
     [Nn]* ) ;;
-    * ) install-apps git@gitr.sys.kth.se:ingo/forsyde-demonstrators.git demo;;
+    * ) install-apps https://github.com/forsyde/forsyde-demonstrators.git demo;;
 esac
 
 
@@ -198,4 +204,6 @@ case $yn in
     [Nn]* ) ;;
     * ) install-f2et;;
 esac
+
+wrap-up
 
