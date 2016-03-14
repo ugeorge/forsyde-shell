@@ -207,3 +207,8 @@ esac
 
 wrap-up
 
+#read -p "Would you like to install the SDF3 tool chain? [y]" yn
+#case $yn in
+#    [Nn]* ) ;;
+#    * ) source shell/__obsolete.sh; install-sdf3;;
+#esac
