@@ -10,7 +10,8 @@ CFLAGS = -Wall -Wno-deprecated -Wno-return-type -Wno-char-subscripts -pthread $(
 #CFLAGS = -arch i386 -Wall -Wno-deprecated -Wno-return-type -Wno-char-subscripts $(DEBUG) $(OPT) $(EXTRACFLAGS)
 
 LIBS   = -lstdc++ -lm $(EXTRA_LIBS) -lsystemc
-OBJS   = $(addprefix obj/,$(notdir $(SRCS:.cpp=.o)))
+OBJS   = $(addprefix obj/,$(notdir $(SRCS:.cpp=.o)))\
+         $(addprefix obj/,$(notdir $(CSRCS:.c=.o)))
 EXE    = run.x
 
 all: directories $(EXE);
@@ -31,6 +32,8 @@ obj/%.o : src/%.cpp
 	-e '/^$$/ d' -e 's/$$/ :/' < obj/$*.d >> obj/$*.P; \
 	rm -f obj/$*.d
 
+obj/%.o : src/%.c
+	$(CC) -c -MMD -o $@ $<
 clean:
 	-rm -rf obj *~ $(EXE)  *.log *.out;
 
