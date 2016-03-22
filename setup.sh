@@ -129,7 +129,7 @@ function install-f2dot {
     add-var "F2DOT" "$(cd $f2dotpath; pwd)/f2dot"
     add-script "$scriptpath/f2dot_script.sh"
     add-intro ' * f2dot           script : $F2DOT' " Tools included:"
-    add-intro " * $(source $scriptpath/f2dot_script.sh; info-f2dot)" "$cmdstring"
+    add-intro " * $(source $scriptpath/f2dot_script.sh; info-plot)" "$cmdstring"
 }
 
 function install-f2sdf3 {

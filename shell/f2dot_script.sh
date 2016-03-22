@@ -13,6 +13,7 @@ function plot () {
 
     esac
 
+	conf_file=$mode.conf
     echo "$conf_file"
     if [ ! -f files/$conf_file ]; then 	
 	mkdir -p files 
