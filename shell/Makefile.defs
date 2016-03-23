@@ -11,7 +11,8 @@ CFLAGS = -Wall -Wno-deprecated -Wno-return-type -Wno-char-subscripts -pthread $(
 
 LIBS   = -lstdc++ -lm $(EXTRA_LIBS) -lsystemc
 OBJS   = $(addprefix obj/,$(notdir $(CSRCS:.c=.o))) \
-	$(addprefix obj/,$(notdir $(SRCS:.cpp=.o)))
+	     $(addprefix obj/,$(notdir $(SRCS:.cpp=.o)))
+
 EXE    = run.x
 
 all: directories $(EXE);
