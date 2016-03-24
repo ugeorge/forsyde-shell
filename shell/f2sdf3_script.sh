@@ -6,7 +6,7 @@ function f2sdf3 () {
     projname=$(basename $(pwd) | sed 's|-|_|g')
     mkdir -p sdf3
     cp $F2SDF3_HOME/DTD/forsyde.dtd ir
-    saxonb-xslt -s:$1 -xsl:$F2SDF3_HOME/converter.xsl -o:sdf3/converter.log -dtd:off -ext:on application-name=$projname inputFolder=$(cd ir; pwd)/ outputFolder=sdf3
+    saxonb-xslt -s:$1 -xsl:$F2SDF3_HOME/f2sdf3.xsl -o:sdf3/log -dtd:off -ext:on debug=yes application-name=$projname types=$(cd ir; pwd)/types.xml inputFolder=$(cd ir; pwd)/ outputFolder=sdf3 2>sdf3/log
 }
 
 function info-f2sdf3 () {
