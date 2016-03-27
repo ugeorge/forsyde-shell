@@ -5,7 +5,7 @@ scriptpath=$(cd shell; pwd)
 shfile=$scriptpath/forsyde-shell.sh
 libdir=$homedir/libs
 tooldir=$homedir/tools
-projdir=$homedir/projects
+projdir=$homedir/workspace
 cmdstring=" Commands provided by this shell (type help-<command> for manual):"
 
 source shell/setup-utils.sh
