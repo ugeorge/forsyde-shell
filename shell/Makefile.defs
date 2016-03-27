@@ -18,7 +18,7 @@ EXE    = run.x
 all: directories $(EXE);
 
 directories:
-	mkdir -p obj
+	mkdir -p obj ir
 
 .PHONY: clean 
 

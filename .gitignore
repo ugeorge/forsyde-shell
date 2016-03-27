@@ -7,5 +7,6 @@
 libs/
 tools/
 projects/
+shell/forsyde-shell.sh*
 *~
 *#

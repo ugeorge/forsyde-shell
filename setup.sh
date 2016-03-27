@@ -132,25 +132,25 @@ function install-f2dot {
     add-intro " * $(source $scriptpath/f2dot_script.sh; info-plot)" "$cmdstring"
 }
 
-function install-f2sdf3 {
+function install-forsyde-m2m {
     echo "Installing dependencies for f2sdf3..."
     if ! $(dpkg -l libsaxonb-java &> /dev/null); then sudo apt-get install -y libsaxonb-java; fi
 
-    f2sdf3path=$tooldir/f2sdf3
-    if [ ! -d $f2sdf3path ]; then
-	echo "$f2sdf3path"
+    fm2mpath=$tooldir/forsyde-m2m
+    if [ ! -d $fm2mpath ]; then
+	echo "$fm2mpath"
 	mkdir -p $tooldir
 	cd tools 
-	git clone https://github.com/forsyde/f2sdf3.git
+	git clone https://github.com/ugeorge/forsyde-m2m.git
 	cd $homedir
     else
-	cd $f2sdf3path
+	cd $fm2mpath
 	git pull
 	cd $homedir
     fi
 
     echo "Creating  shell environment variables for f2sdf3... "
-    add-var "F2SDF3_HOME" "$(cd $f2sdf3path; pwd)"
+    add-var "F2SDF3_HOME" "$(cd $fm2mpath; pwd)"
     add-script "$scriptpath/f2sdf3_script.sh"
     add-intro ' * f2sdf3          prefix : $F2SDF3_HOME' " Tools included:"
     add-intro " * $(source $scriptpath/f2sdf3_script.sh; info-f2sdf3)" "$cmdstring"
@@ -193,10 +193,10 @@ case $yn in
     * ) install-f2dot;;
 esac
 
-read -p "Would you like to set up f2sdf3 for converting ForSyDe IR into SDF3 format? [y]" yn
+read -p "Would you like to set up ForSyDe Model-to-Model transformation scripts? [y]" yn
 case $yn in
     [Nn]* ) ;;
-    * ) install-f2sdf3;;
+    * ) install-forsyde-m2m;;
 esac
 
 read -p "Would you like to install valgrind for run-time analysis of ForSyDe-SystemC models? [y]" yn

@@ -30,6 +30,7 @@ function execute-model () {
     annotated_cal=exec_times/annotated$timestamp.out
     exec_csv=exec_times/exec_$projname$timestamp.csv
     exec_pdf=exec_times/exec_$projname$timestamp.pdf
+	mkdir -p ir
 
     if [[ "$@" == *"-p"* ]]; then
 	mkdir -p exec_times
@@ -37,7 +38,7 @@ function execute-model () {
 	    --callgrind-out-file=$callgrind_out ./run.x
 	touch $annotated_cal
 	callgrind_annotate $callgrind_out > $annotated_cal
-	rm *.out
+	rm $callgrind_out
     else
 	./run.x
     fi

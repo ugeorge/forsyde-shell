@@ -19,7 +19,7 @@ function plot () {
 	mkdir -p files 
 	python $F2DOT -g -m $mode -o files > /dev/null
     fi 
-    python $F2DOT -c files/$conf_file -o plots "$@"
+    python $F2DOT -c files/$conf_file -m $mode -o plots "$@"
 }
 
 
