@@ -16,7 +16,7 @@ FORSYDE_BASH_RUN=1
 
 echo "########################################################################
 
-               =  ForSyDe Demonstrators Project =
+                     =  ForSyDe Shell =
 
  Applications:
 
@@ -29,7 +29,7 @@ echo "########################################################################
 ########################################################################
 "
 
-cd projects
+cd $WORKSPACE
 
 export LS_OPTIONS='--color=auto'
 eval "`dircolors`"

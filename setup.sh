@@ -1,5 +1,10 @@
 #!/bin/bash
 
+forsyde_systemc_url='-b type-introspection --single-branch git@github.com:ugeorge/ForSyDe-SystemC.git'
+forsyde_m2m_url='git@github.com:ugeorge/forsyde-m2m.git'
+forsyde_demo_url='git@github.com:forsyde/forsyde-demonstrators.git'
+f2dot_url='git@github.com:forsyde/f2dot.git'
+
 homedir=$(pwd)
 scriptpath=$(cd shell; pwd)
 shfile=$scriptpath/forsyde-shell.sh
@@ -9,6 +14,7 @@ projdir=$homedir/workspace
 cmdstring=" Commands provided by this shell (type help-<command> for manual):"
 
 source shell/setup-utils.sh
+source shell/general.sh
 
 function init-shell () {
     if [[ $1 == *"-r"* ]]; then
@@ -32,6 +38,7 @@ function init-shell () {
 
     echo "Setting up the shell environment..."
     cp -n shell/forsyde-shell.template $shfile
+    add-intro "export WORKSPACE=${projdir}" "#vars begin";
     add-var "DEMO_HOME" "$(pwd)"
 
     if ! $(dpkg -l build-essential &> /dev/null); then sudo apt-get install -y build-essential; fi
@@ -62,7 +69,7 @@ function install-forsyde-systemc {
     if [ ! -d $libdir/ForSyDe-SystemC ]; then
 	mkdir -p $libdir
 	cd $libdir 
-	git clone https://github.com/forsyde/ForSyDe-SystemC.git
+	git clone $forsyde_systemc_url
 	cd ..
     else
 	cd $libdir/ForSyDe-SystemC
@@ -117,7 +124,7 @@ function install-f2dot {
     if [ ! -d $f2dotpath ]; then
 	mkdir -p tools
 	cd $tooldir
-	git clone https://github.com/forsyde/f2dot.git
+	git clone $f2dot_url
 	cd $homedir 
     else
 	cd $f2dotpath
@@ -133,7 +140,7 @@ function install-f2dot {
 }
 
 function install-f2sdf3 {
-    echo "Installing dependencies for f2sdf3..."
+    echo "Installing dependencies for forsyde-m2m..."
     if ! $(dpkg -l libsaxonb-java &> /dev/null); then sudo apt-get install -y libsaxonb-java; fi
 
     f2sdf3path=$tooldir/f2sdf3
@@ -141,7 +148,7 @@ function install-f2sdf3 {
 	echo "$f2sdf3path"
 	mkdir -p $tooldir
 	cd tools 
-	git clone https://github.com/forsyde/f2sdf3.git
+	git clone $forsyde_m2m_url
 	cd $homedir
     else
 	cd $f2sdf3path
@@ -183,7 +190,7 @@ esac
 read -p "Would you like to install the public demonstrator apps for ForSyDe? [y]" yn
 case $yn in
     [Nn]* ) ;;
-    * ) install-apps https://github.com/forsyde/forsyde-demonstrators.git demo;;
+    * ) install-apps $forsyde_demo_url demo;;
 esac
 
 
@@ -193,7 +200,7 @@ case $yn in
     * ) install-f2dot;;
 esac
 
-read -p "Would you like to set up f2sdf3 for converting ForSyDe IR into SDF3 format? [y]" yn
+read -p "Would you like to set up forsyde-m2m for converting ForSyDe IR different other models? [y]" yn
 case $yn in
     [Nn]* ) ;;
     * ) install-f2sdf3;;
