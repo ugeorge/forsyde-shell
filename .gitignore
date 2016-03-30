@@ -6,7 +6,7 @@
 !shell/*
 libs/
 tools/
-projects/
+workspace/
 shell/forsyde-shell.sh*
 *~
 *#
