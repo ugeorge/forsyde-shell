@@ -33,4 +33,35 @@ Open the newly created shell by running
     ./forsyde-shell
     
 which starts in the working directory `models`. The welcome screen contains enough information for getting started. All in-built commands come with usage manuals which can be printed by calling `help-<command>` inside the shell.
-x
+
+**OBS**: we recommend studying the available commands by typing `list-commands` before starting to use the shell.
+
+
+### Development inside the shell
+
+After setting up the ForSyDe-Shell a lot of help information is displayed accordingly, either in the welcome screen or by calling the `list-commands` or `help-<command>` functions. But there are a few more tricks that a developer has to know in order to use or extend the shell.
+
+#### Directory structure
+
+A fully set up shell has the following structure:
+  * `setup.sh` is the setup script. It takes care of acquiring and putting everything to its place.
+  * `forsyde-shell` is the generated executable that opens a new shell window
+  * `shell/` contains everything needed for this to run and comes with the repository. Here reside mainly bash scripts (e.g. defining shell functions), makefile definitions, file templates and configuration files.
+  * `libs/` In case one has chosen to, libraries such as ForSyDe-SystemC, ForSyDe-Shallow or SDF3 will be installed here.
+  * `tools/` As well, here are placed tools in form of binaries or source code. For non-binary distributions the setup should take care of installing dependent libraries, parsers, compilers or execution environments.
+  * `workspace/` here is the workspace for ForSyDe projects. Usually forsyde-shell starts from here as `pwd`.
+
+#### ForSyDe-SystemC project structure
+
+A project may be anywhere accessible on the file system, although it is recommended to be somewhere under `workspace`. In order to minimize the overhead of setting or passing parameters around or dealing with complex scripts, ForSyDe-Shell operates on the following conventional structure:
+ * `application-name/` : important since it will appear in several places
+     - `.project` : dummy file that tells the shell that this is a project
+     - `Makefile` : created with `generate-makefile` and then modified accordingly 
+     - `src/` : here are the source files. All `.c` and `.cpp` files need to be here (no subfolders allowed)-
+     - `files/` : miscellaneous files, such as inputs or configurations.
+     - `ir/` : is where the ForSyDe-IR model is expected to be found by default by most of the tools. This means that you must make sure that ForSyDe introspection dumps XML files there.
+     - other generated folders, depending on the tools ran. 
+
+#### Environment variables:
+
+In order to know what environment variables are available and their values, one can check the generated shell source script in `shell/forsyde-shell.sh`

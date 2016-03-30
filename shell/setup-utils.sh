@@ -15,7 +15,7 @@ function add-script {
 function add-intro {
     echo "$1" | while read line; do
 	if ! grep -q "$line" $shfile ; then
-	    sed -ie "s|$2|$2\n$line|g" $shfile
+	    sed -i "s|$2|$2\n$line|g" $shfile
 	fi
     done 
 }
