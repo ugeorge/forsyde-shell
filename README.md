@@ -8,9 +8,9 @@ For the ForSyDe-SystemC projects you need to install [SystemC](http://www.accell
 
 ### Installation
 
-Currently the installation script works only on Debian distributions of Linux. For the time being you can study `setup.sh` to install manually all dependencies on other OSs.
+Currently the installation script works only on Debian distributions of Linux. On other OS, for the time being you can study `setup.sh` to install manually all dependencies.
 
-To install the dependencies and create the shell simply run from the current folder:
+To install all dependencies and create the shell simply run from the current folder:
 
     ./setup.sh
 
@@ -18,13 +18,15 @@ and follow the instructions.
 
 In case you need to update your installation options you can run `setup.sh` again and it will just update the shell, without modifying the existing options.
 
+If you want to perform the installation in non-interactive mode, you can run `setup.sh` with the following parameters:
+
 If you need to reset the shell (without reinstalling the tools) type
 
-    ./setup.sh -r
+    ./setup.sh --no-dialog             # non-interactive. Updates shell if one exists already
+    ./setup.sh --no-dialog --reset     # non-interactive. Resets shell if one exists already
+    ./setup.sh --no-dialog --uninstall # non-interactive. Uninstalls everything.
 
-If you want to completely uninstall the tools, libraries and the shell, type
-
-    ./setup.sh -u
+In non-interactive mode the installation configuration must be set in `shell/default.conf`
 
 ### Running the shell
 
