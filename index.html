@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Forsyde-shell by ugeorge</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Forsyde-shell</h1>
+        <p>A shell environment for all ForSyDe tools</p>
+
+        <p class="view"><a href="https://github.com/ugeorge/forsyde-shell">View the Project on GitHub <small>ugeorge/forsyde-shell</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/ugeorge/forsyde-shell/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/ugeorge/forsyde-shell/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/ugeorge/forsyde-shell">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="forsyde-shell" class="anchor" href="#forsyde-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ForSyDe Shell</h1>
+
+<p>The current project provides a set of scripts to set up the ForSyDe ecosystem for the demonstrator applications and create a shell environment with the necessary commands.</p>
+
+<h3>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h3>
+
+<p>For the ForSyDe-SystemC projects you need to install <a href="http://www.accellera.org/downloads/standards/systemc">SystemC</a> manually on your workstation. </p>
+
+<h3>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h3>
+
+<p>Currently the installation script works only on Debian distributions of Linux. On other OS, for the time being you can study <code>setup.sh</code> to install manually all dependencies.</p>
+
+<p>To install all dependencies and create the shell simply run from the current folder:</p>
+
+<pre><code>./setup.sh
+</code></pre>
+
+<p>and follow the instructions.</p>
+
+<p>In case you need to update your installation options you can run <code>setup.sh</code> again and it will just update the shell, without modifying the existing options.</p>
+
+<p>If you want to perform the installation in non-interactive mode, you can run <code>setup.sh</code> with the following parameters:</p>
+
+<p>If you need to reset the shell (without reinstalling the tools) type</p>
+
+<pre><code>./setup.sh --no-dialog             # non-interactive. Updates shell if one exists already
+./setup.sh --no-dialog --reset     # non-interactive. Resets shell if one exists already
+./setup.sh --no-dialog --uninstall # non-interactive. Uninstalls everything.
+</code></pre>
+
+<p>In non-interactive mode the installation configuration must be set in <code>shell/default.conf</code></p>
+
+<h3>
+<a id="running-the-shell" class="anchor" href="#running-the-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running the shell</h3>
+
+<p>Open the newly created shell by running</p>
+
+<pre><code>./forsyde-shell
+</code></pre>
+
+<p>which starts in the working directory <code>models</code>. The welcome screen contains enough information for getting started. All in-built commands come with usage manuals which can be printed by calling <code>help-&lt;command&gt;</code> inside the shell.</p>
+
+<p><strong>OBS</strong>: we recommend studying the available commands by typing <code>list-commands</code> before starting to use the shell.</p>
+
+<h3>
+<a id="development-inside-the-shell" class="anchor" href="#development-inside-the-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Development inside the shell</h3>
+
+<p>After setting up the ForSyDe-Shell a lot of help information is displayed accordingly, either in the welcome screen or by calling the <code>list-commands</code> or <code>help-&lt;command&gt;</code> functions. But there are a few more tricks that a developer has to know in order to use or extend the shell.</p>
+
+<h4>
+<a id="directory-structure" class="anchor" href="#directory-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Directory structure</h4>
+
+<p>A fully set up shell has the following structure:</p>
+
+<ul>
+<li>
+<code>setup.sh</code> is the setup script. It takes care of acquiring and putting everything to its place.</li>
+<li>
+<code>forsyde-shell</code> is the generated executable that opens a new shell window</li>
+<li>
+<code>shell/</code> contains everything needed for this to run and comes with the repository. Here reside mainly bash scripts (e.g. defining shell functions), makefile definitions, file templates and configuration files.</li>
+<li>
+<code>libs/</code> In case one has chosen to, libraries such as ForSyDe-SystemC, ForSyDe-Shallow or SDF3 will be installed here.</li>
+<li>
+<code>tools/</code> As well, here are placed tools in form of binaries or source code. For non-binary distributions the setup should take care of installing dependent libraries, parsers, compilers or execution environments.</li>
+<li>
+<code>workspace/</code> here is the workspace for ForSyDe projects. Usually forsyde-shell starts from here as <code>pwd</code>.</li>
+</ul>
+
+<h4>
+<a id="forsyde-systemc-project-structure" class="anchor" href="#forsyde-systemc-project-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ForSyDe-SystemC project structure</h4>
+
+<p>A project may be anywhere accessible on the file system, although it is recommended to be somewhere under <code>workspace</code>. In order to minimize the overhead of setting or passing parameters around or dealing with complex scripts, ForSyDe-Shell operates on the following conventional structure:</p>
+
+<ul>
+<li>
+<code>application-name/</code> : important since it will appear in several places
+
+<ul>
+<li>
+<code>.project</code> : dummy file that tells the shell that this is a project</li>
+<li>
+<code>Makefile</code> : created with <code>generate-makefile</code> and then modified accordingly </li>
+<li>
+<code>src/</code> : here are the source files. All <code>.c</code> and <code>.cpp</code> files need to be here (no subfolders allowed)-</li>
+<li>
+<code>files/</code> : miscellaneous files, such as inputs or configurations.</li>
+<li>
+<code>ir/</code> : is where the ForSyDe-IR model is expected to be found by default by most of the tools. This means that you must make sure that ForSyDe introspection dumps XML files there.</li>
+<li>other generated folders, depending on the tools ran. </li>
+</ul>
+</li>
+</ul>
+
+<h4>
+<a id="environment-variables" class="anchor" href="#environment-variables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Environment variables:</h4>
+
+<p>In order to know what environment variables are available and their values, one can check the generated shell source script in <code>shell/forsyde-shell.sh</code></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/ugeorge">ugeorge</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
